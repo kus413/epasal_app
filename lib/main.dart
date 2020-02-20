@@ -1,4 +1,3 @@
-import 'package:epasal_app/models/product.dart';
 import 'package:epasal_app/provider/products_provider.dart';
 import 'package:epasal_app/screens/product_details_screen.dart';
 import 'package:epasal_app/screens/product_overview_screen.dart';
@@ -11,8 +10,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => Products(),
+    return ChangeNotifierProvider.value(
+      value: Products(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'E-Pasal',

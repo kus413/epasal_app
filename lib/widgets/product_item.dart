@@ -1,16 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:epasal_app/provider/product.dart';
 import 'package:epasal_app/screens/product_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductItem extends StatelessWidget {
-  final String imageURL, title;
-  final String id;
-
-  ProductItem({this.imageURL, this.title, this.id});
-
   @override
   Widget build(BuildContext context) {
     //Circular grid boarder
+    final product = Provider.of<Product>(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10.0),
       child: GridTile(
@@ -18,7 +16,7 @@ class ProductItem extends StatelessWidget {
           child: GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, ProductDetails.routeId,
-                  arguments: id);
+                  arguments: product.id);
 
 //              Navigator.push(
 //                context,
@@ -28,7 +26,7 @@ class ProductItem extends StatelessWidget {
 //              );
             },
             child: CachedNetworkImage(
-              imageUrl: imageURL,
+              imageUrl: product.imageURL,
               fit: BoxFit.cover,
               placeholder: (context, url) => CircularProgressIndicator(),
               errorWidget: (context, url, error) => Icon(Icons.error),
@@ -36,10 +34,14 @@ class ProductItem extends StatelessWidget {
           ),
           footer: GridTileBar(
             backgroundColor: Colors.black87,
-            title: Text(title, textAlign: TextAlign.center),
+            title: Text(product.title, textAlign: TextAlign.center),
             leading: IconButton(
-              icon: Icon(Icons.favorite),
-              onPressed: () {},
+              icon: product.isFavourite
+                  ? Icon(Icons.favorite)
+                  : Icon(Icons.favorite_border),
+              onPressed: () {
+                product.toggleIsFavourite();
+              },
               color: Theme.of(context).accentColor,
             ),
             trailing: IconButton(
