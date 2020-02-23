@@ -37,12 +37,21 @@ class Products with ChangeNotifier {
         isFavourite: false),
   ];
 
+  // return all items
   List<Product> get items {
     return [..._items];
   }
 
+  // this returns only favourite product from the list
+  List<Product> get favourites {
+    return _items.where((prodItem) {
+      return prodItem.isFavourite;
+    }).toList();
+  }
+
+  //return specific items
   Product findById(String id) {
-    return items.firstWhere((prod) {
+    return _items.firstWhere((prod) {
       return prod.id == id;
     });
   }

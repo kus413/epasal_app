@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:epasal_app/provider/cart_provider.dart';
 import 'package:epasal_app/provider/product.dart';
 import 'package:epasal_app/screens/product_details_screen.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,8 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Circular grid boarder
-    final product = Provider.of<Product>(context);
+    final product = Provider.of<Product>(context, listen: false);
+    final cart = Provider.of<Cart>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10.0),
       child: GridTile(
@@ -35,18 +37,22 @@ class ProductItem extends StatelessWidget {
           footer: GridTileBar(
             backgroundColor: Colors.black87,
             title: Text(product.title, textAlign: TextAlign.center),
-            leading: IconButton(
-              icon: product.isFavourite
-                  ? Icon(Icons.favorite)
-                  : Icon(Icons.favorite_border),
-              onPressed: () {
-                product.toggleIsFavourite();
-              },
-              color: Theme.of(context).accentColor,
+            leading: Consumer<Product>(
+              builder: (ctx, prod, child) => IconButton(
+                icon: prod.isFavourite
+                    ? Icon(Icons.favorite)
+                    : Icon(Icons.favorite_border),
+                onPressed: () {
+                  prod.toggleIsFavourite();
+                },
+                color: Theme.of(context).accentColor,
+              ),
             ),
             trailing: IconButton(
               icon: Icon(Icons.shopping_cart),
-              onPressed: () {},
+              onPressed: () {
+                cart.addToCart(product.id, product.title, product.price);
+              },
               color: Theme.of(context).accentColor,
             ),
           )),
