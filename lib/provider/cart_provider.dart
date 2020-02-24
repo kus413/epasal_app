@@ -45,4 +45,23 @@ class Cart with ChangeNotifier {
   int get itemCount {
     return _items == null ? 0 : _items.length;
   }
+
+  //this is used to remove item from the cart
+  void removeFromCart(String id) {
+    _items.remove(id);
+    notifyListeners();
+  }
+
+  double getTotalAmount() {
+    double total = 0.0;
+    _items.forEach((key, cartItem) {
+      total += cartItem.quantity * cartItem.price;
+    });
+    return total;
+  }
+
+  void clearCart() {
+    _items = {};
+    notifyListeners();
+  }
 }

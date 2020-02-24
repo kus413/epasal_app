@@ -1,5 +1,7 @@
 import 'package:epasal_app/provider/cart_provider.dart' show Cart;
-import 'package:epasal_app/widgets/cart_item.dart';
+import 'package:epasal_app/provider/order_provider.dart';
+import 'package:epasal_app/screens/order_screen.dart';
+import 'package:epasal_app/widgets/cart_item.dart' as CI;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,7 +9,8 @@ class CartScreen extends StatelessWidget {
   static const String routeId = "/cart_screen";
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<Cart>(context).items;
+    final cart = Provider.of<Cart>(context);
+    final order = Provider.of<Orders>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text("Your Cart"),
@@ -29,7 +32,7 @@ class CartScreen extends StatelessWidget {
                   Spacer(),
                   Chip(
                     label: Text(
-                      "\$100",
+                      "\$${cart.getTotalAmount()}",
                       style: TextStyle(color: Colors.white),
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
@@ -42,7 +45,14 @@ class CartScreen extends StatelessWidget {
                           fontSize: 18.0,
                           color: Theme.of(context).primaryColor),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      if (cart.getTotalAmount() > 0) {
+                        order.addOrder(
+                            cart.items.values.toList(), cart.getTotalAmount());
+                        cart.clearCart();
+                        Navigator.pushNamed(context, OrderScreen.routeId);
+                      } else {}
+                    },
                   )
                 ],
               ),
@@ -53,8 +63,14 @@ class CartScreen extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 3,
-              itemBuilder: (context, i) => CartItem(),
+              itemCount: cart.itemCount,
+              itemBuilder: (context, i) => CI.CartItem(
+                id: cart.items.values.toList()[i].id,
+                title: cart.items.values.toList()[i].title,
+                price: cart.items.values.toList()[i].price,
+                productId: cart.items.keys.toList()[i],
+                quantity: cart.items.values.toList()[i].quantity,
+              ),
             ),
           ),
         ],
