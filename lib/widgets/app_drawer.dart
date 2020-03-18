@@ -1,5 +1,6 @@
 import 'package:epasal_app/screens/order_screen.dart';
 import 'package:epasal_app/screens/product_overview_screen.dart';
+import 'package:epasal_app/screens/user_product_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -28,6 +29,14 @@ class AppDrawer extends StatelessWidget {
               leading: Icon(Icons.payment),
               onTap: () {
                 Navigator.pushReplacementNamed(context, OrderScreen.routeId);
+              }),
+          Divider(),
+          ListTile(
+              title: Text("Manage Product"),
+              leading: Icon(Icons.edit),
+              onTap: () {
+                Navigator.pushReplacementNamed(
+                    context, UserProductScreen.routeId);
               }),
           Divider(),
         ],

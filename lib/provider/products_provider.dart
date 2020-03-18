@@ -9,7 +9,7 @@ class Products with ChangeNotifier {
         price: 2000.0,
         description: "Best watch you will find",
         imageURL:
-            "https://images.rolex.com/2019/catalogue/images/upright-bba-with-shadow/m326935-0007.png?impolicy=upright-grid-card&imwidth=585",
+            "https://images-na.ssl-images-amazon.com/images/I/910D0vQR2HL._UL1500_.jpg",
         isFavourite: false),
     Product(
         id: "second",
@@ -56,15 +56,32 @@ class Products with ChangeNotifier {
     });
   }
 
-  void addProduct() {
-    _items.add(Product(
-        id: "four",
-        title: "OnePlus",
-        price: 67000,
-        description: "Fastest Phone",
-        imageURL:
-            "https://i.gadgets360cdn.com/products/large/1557831009_635_OnePlus_7_Main_DB.jpg",
-        isFavourite: false));
+  //------------ this function adds the product-----------
+
+  void addProduct(Product product) {
+    Product newProduct = Product(
+      title: product.title,
+      price: product.price,
+      description: product.description,
+      imageURL: product.imageURL,
+      id: DateTime.now().toString(),
+    );
+    _items.insert(0, newProduct);
+    notifyListeners();
+  }
+
+  //------------ this function updates the current product-----------
+  void updateProduct(String id, Product upProduct) {
+    final productIndex = _items.indexWhere((prod) => prod.id == id);
+    if (productIndex >= 0) {
+      _items[productIndex] = upProduct;
+      notifyListeners();
+    }
+  }
+
+  //------------ this function delete current product----------
+  void deleteProduct(String id) {
+    _items.removeWhere((prod) => prod.id == id);
     notifyListeners();
   }
 }

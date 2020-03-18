@@ -2,9 +2,11 @@ import 'package:epasal_app/provider/cart_provider.dart';
 import 'package:epasal_app/provider/order_provider.dart';
 import 'package:epasal_app/provider/products_provider.dart';
 import 'package:epasal_app/screens/cart_scereen.dart';
+import 'package:epasal_app/screens/edit_product_screen.dart';
 import 'package:epasal_app/screens/order_screen.dart';
 import 'package:epasal_app/screens/product_details_screen.dart';
 import 'package:epasal_app/screens/product_overview_screen.dart';
+import 'package:epasal_app/screens/user_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,6 +41,8 @@ class MyApp extends StatelessWidget {
           ProductDetails.routeId: (context) => ProductDetails(),
           CartScreen.routeId: (context) => CartScreen(),
           OrderScreen.routeId: (context) => OrderScreen(),
+          UserProductScreen.routeId: (context) => UserProductScreen(),
+          EditProductScreen.routeId: (context) => EditProductScreen(),
         },
       ),
     );
