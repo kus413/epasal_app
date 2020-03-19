@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:epasal_app/provider/product.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Products with ChangeNotifier {
+//  const url = "https://epasal-c2ace.firebaseio.com/products.json";
+//  http.Response response = http.get(url);
   List<Product> _items = [
     Product(
         id: "first",
@@ -58,16 +63,41 @@ class Products with ChangeNotifier {
 
   //------------ this function adds the product-----------
 
-  void addProduct(Product product) {
-    Product newProduct = Product(
-      title: product.title,
-      price: product.price,
-      description: product.description,
-      imageURL: product.imageURL,
-      id: DateTime.now().toString(),
-    );
-    _items.insert(0, newProduct);
-    notifyListeners();
+  Future<void> addProduct(Product product) {
+    const url = "https://epasal-c2ace.firebaseio.com/products.json";
+
+    //---------- http testing------------
+
+    //    const test = "http://ip.jsontest.com/";
+    //    http.Response response = await http.get(test);
+    //    print(response.body);
+
+    return http
+        .post(url,
+            body: json.encode({
+              'title': product.title,
+              'price': product.price,
+              'description': product.description,
+              'imageURL': product.imageURL,
+              'isFavourite': product.isFavourite
+            }))
+        //------------- then uses future so that after posting on URL other things are executed-----------------
+        .then((response) {
+      print(json.decode(response.body));
+      Product newProduct = Product(
+          title: product.title,
+          price: product.price,
+          description: product.description,
+          imageURL: product.imageURL,
+          id: json.decode(response.body)['name']);
+      _items.insert(0, newProduct);
+      notifyListeners();
+    })
+        //--------------If we get ab error during post we can catch the error and execute accordingly------------
+        .catchError((error) {
+      print(error);
+      throw error;
+    });
   }
 
   //------------ this function updates the current product-----------
